@@ -3,22 +3,39 @@
 ### Required Features
 
 1. Login/Register
+   
    1.1 Secure passwords
+   
    1.2 Validation
+
 2. Users
+    
     2.1 Update
+    
     2.2 Display,
+    
     2.3 Delete
+
 3. Cloud image storage, or full text search, or something more complicated than microposts (I bet we could do 2 of these)
+
 4. Account activation
+
 5. Password reset
+
 6. Microblog features
+   
    6.1 Like
+   
    6.2 Follow
+   
    6.3 Share
+   
    6.4 Repost
+   
    6.5 Update
+   
    6.6 Delete
+   
 7. Deploy all of this on a cloud service (edited) 
 
 
