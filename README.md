@@ -36,7 +36,13 @@
    
    6.6 Delete
    
-7. Deploy all of this on a cloud service (edited) 
+7. Deploy all of this on a cloud service (edited)
+
+### Stack
+Framework: Laravel
+Language: PHP
+DB: MySQL
+Cloud Host: Heroku
 
 
 
