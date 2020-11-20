@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialController;
+use App\Http\Controllers\HomeController;
+Auth::routes();
 
 /*
 |--------------------------------------------------------------------------
@@ -13,14 +15,11 @@ use App\Http\Controllers\SocialController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/', [HomeController::class, 'index']);
+	
 });
 
-Route::get('/home', function () {
-    return view('home');
-});
 
 
 Route::get('login/{provider}', [SocialController::class, 'redirect']);
