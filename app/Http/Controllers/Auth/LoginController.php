@@ -28,4 +28,10 @@ class LoginController extends Controller
 
         // $user->token;
     }
+
+
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
 }
