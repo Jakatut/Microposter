@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\HomeController;
+
 Auth::routes();
 
 /*
@@ -17,7 +18,8 @@ Auth::routes();
 */
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('/', [HomeController::class, 'index']);
-	
+	Route::get('/home', [HomeController::class, 'index']);
+	// Route::get('/logout', [LoginController::class, 'doLogout']);
 });
 
 
