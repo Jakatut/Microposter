@@ -13,7 +13,7 @@ class CreateFollowerTable extends Migration
      */
     public function up()
     {
-        Schema::create('Follower', function (Blueprint $table) {
+        Schema::create('follower', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('user_id');
@@ -28,6 +28,6 @@ class CreateFollowerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Follower');
+        Schema::dropIfExists('follower');
     }
 }
