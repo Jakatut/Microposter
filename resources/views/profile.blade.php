@@ -19,8 +19,12 @@
                 <img src="{{$user->profileImage}}" height="100" width="100">
             @endif
             <p>{{$user->name}}</p>
-            <p>Following: {{$user->followingCount}}</p>
-            <p>Followers: {{$user->followerCount}}</p>
+            <p>Following: 0</p>
+            <p>Followers: 0</p>
+            
+            @if (Auth::user()->id !== $user->id)
+                <button>Follow</button>
+            @endif
         </div>
         <div class="col-md-8">
             <div class="card">

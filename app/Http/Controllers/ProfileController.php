@@ -36,8 +36,7 @@ class ProfileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function profileById(Request $request) {
-        $id = $request->query('id');
+    public function profileById(Request $request, $id) {
         $user = DB::table('users')->where('id', $id)->first();
         return view('profile', ['user' => $user]);
     }
