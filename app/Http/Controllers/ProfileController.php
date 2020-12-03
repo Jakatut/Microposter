@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Follower;
 use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +30,8 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('profile', ['user' => $user]);
+        $followCounts = self::getFollowCounts($user->id);
+        return view('profile', array_merge(['user' => $user], $followCounts));
     }
 
     /**
@@ -40,9 +43,10 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function profileById(Request $request, $id) {
-        $user = DB::table('users')->where('id', $id)->first();
+        $user = User::find($id);
         $following = Profile::isFollowing($id);
-        return view('profile', ['user' => $user] + $following);
+        $followCounts = self::getFollowCounts($id);
+        return view('profile', array_merge(['user' => $user], $following, $followCounts));
     }
 
     public function follow(Request $request, $id) {
@@ -100,5 +104,11 @@ class ProfileController extends Controller
         //
     }
 
+
+    private static function getFollowCounts($userId) {
+        $followerCount = User::find($userId)->followers()->count();
+        $followingCount = Follower::where('follower_id', $userId)->count();
+        return ['followerCount' => $followerCount, 'followingCount' => $followingCount];
+    }
 
 }
