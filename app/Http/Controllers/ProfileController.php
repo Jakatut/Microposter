@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -40,22 +40,18 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function profileById(Request $request, $id) {
-        $user = new User();
-        $following = $user->isFollowing($id);
-        
         $user = DB::table('users')->where('id', $id)->first();
+        $following = Profile::isFollowing($id);
         return view('profile', ['user' => $user] + $following);
     }
 
     public function follow(Request $request, $id) {
-        $user = new User();
-        $result = $user->follow($id);
+        $result = Profile::follow($id);
         return response()->json($result);
     }
 
     public function isFollowing(Request $request, $id) {
-        $user = new User();
-        $result = $user->isFollowing($id);
+        $result = Profile::isFollowing($id);
         return response()->json($result);
     }
 
