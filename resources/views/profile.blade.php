@@ -3,13 +3,9 @@
 @section('content')
 <div class="container">
     @if (empty($user))
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                    <p>This profile does not exist</p>
-            </div>
+        <div class="row justify-content-center">
+            <h2>This profile does not exist</h2>
         </div>
-    </div>
     @else
     <div class="row justify-content-center">
         <div class="col-md-2" id="user-details">
