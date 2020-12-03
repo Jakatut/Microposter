@@ -23,6 +23,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 	Route::get('/profile/{id}', [ProfileController::class, 'profileById'])->name('profileById');
 	Route::post('/profile/{id}/follow', [ProfileController::class, 'follow'])->name('follow');
+	Route::get('/profile/{id}/isFollowing', [ProfileController::class, 'isFollowing'])->name('isFollowing');
+
 	// Route::get('/logout', [LoginController::class, 'doLogout']);
 });
 

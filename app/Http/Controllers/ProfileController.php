@@ -40,13 +40,22 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function profileById(Request $request, $id) {
+        $user = new User();
+        $following = $user->isFollowing($id);
+        
         $user = DB::table('users')->where('id', $id)->first();
-        return view('profile', ['user' => $user]);
+        return view('profile', ['user' => $user] + $following);
     }
 
     public function follow(Request $request, $id) {
         $user = new User();
         $result = $user->follow($id);
+        return response()->json($result);
+    }
+
+    public function isFollowing(Request $request, $id) {
+        $user = new User();
+        $result = $user->isFollowing($id);
         return response()->json($result);
     }
 
