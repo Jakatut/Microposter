@@ -19,7 +19,7 @@
             <p>Followers: 0</p>
             
             @if (Auth::user()->id !== $user->id)
-                <button>Follow</button>
+                <button class="follow-user">Follow</button>
             @endif
         </div>
         <div class="col-md-8">
@@ -30,4 +30,31 @@
     </div>
     @endif
 </div>
+
+@push('user-scripts')
+    <script>
+        jQuery(function(){
+            $(".follow-user").on('click', function() {
+                let idOfUserToFollower = JSON.parse("{{json_encode($user->id)}}");
+                $.ajax({
+                    type: "POST",
+                    url: `${idOfUserToFollower}/follow`,
+                    success: function (result) {
+                        if (result.following == true) {
+                            
+                            $(".follow-user").html('Unfollow');
+                        } else {
+                            $(".follow-user").html('Follow');
+                        }
+                    },
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    dataType:"json"
+                });
+            });
+        });
+    </script>
+@endpush
+
 @endsection

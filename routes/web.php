@@ -21,7 +21,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/', [HomeController::class, 'index']);
 	Route::get('/home', [HomeController::class, 'index']);
 	Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-	Route::get('/profile/{name}', [ProfileController::class, 'profileById'])->name('profileById');
+	Route::get('/profile/{id}', [ProfileController::class, 'profileById'])->name('profileById');
+	Route::post('/profile/{id}/follow', [ProfileController::class, 'follow'])->name('follow');
 	// Route::get('/logout', [LoginController::class, 'doLogout']);
 });
 
