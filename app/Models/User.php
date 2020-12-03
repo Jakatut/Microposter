@@ -59,4 +59,10 @@ class User extends Authenticatable
 
          return $followingStatus;
     }
+
+    public function isFollowing(int $followedUserId) {
+         // Check that the provided user id actually exists.
+         $isFollowing = DB::table('follower')->where([['user_id', '=', $followedUserId]], ['follower_id', '=', Auth::user()->id])->count() === 1;
+         return ['following' => $isFollowing];
+    }
 }
