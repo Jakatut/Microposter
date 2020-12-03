@@ -13,36 +13,44 @@ class Profile extends Model
 
     public static function follow(int $followedUserId) {
         $followingStatus = ['following' => true];
-         // Check that the provided user id actually exists.
-         $isFollowing = DB::table('follower')->where([['user_id', '=', $followedUserId]], ['follower_id', '=', Auth::user()->id])->count() === 1;
-         if (!$isFollowing) {
-             // user_id is the user of the account we are about to follow.
-             // follower_id is the id of the account that clicked the follow button.
-             DB::table('follower')->insert(['user_id' => $followedUserId, 'follower_id' => Auth::user()->id]);
-         } else {
-            $followingStatus['following'] = false;
-            $followId = DB::table('follower')->where([['user_id', '=', Auth::user()->id], ['follower_id', '=', $followedUserId]])->first();
-            DB::table('follower')->delete($followId);
-         }
 
-         return $followingStatus;
+        $currentUserId = Auth::user()->id;
+
+        // Check that the provided user id actually exists.
+        $follower = User::find($followedUserId)->followers()->where('follower_id', $currentUserId);
+        if ($follower->count() === 0) {
+            // user_id is the user of the account we are about to follow.
+            // follower_id is the id of the account that clicked the follow button.
+            $follower = new Follower();
+            $follower->user_id = $followedUserId;
+            $follower->follower_id = $currentUserId;
+            $follower->save();
+            
+        } else {
+            $follower->delete();
+            $followingStatus = ['following' => false];
+        }
+
+        $followingStatus = array_merge($followingStatus, ['followingCount' => Profile::getFollowingCount($followedUserId), 'followerCount' => Profile::getFollowerCount($followedUserId)]);
+        return $followingStatus;
     }
 
     public static function isFollowing(int $followedUserId) {
-         // Check that the provided user id actually exists.
-         $isFollowing = DB::table('follower')->where([['user_id', '=', $followedUserId]], ['follower_id', '=', Auth::user()->id])->count() === 1;
-         return ['following' => $isFollowing];
+        $currentUserId = Auth::user()->id;
+        // Check that the provided user id actually exists.
+        $isFollowing = User::find($followedUserId)->followers()->where('follower_id', $currentUserId)->count() === 1;
+        return ['following' => $isFollowing];
     }
 
     public static function getFollowerCount($id) {
-        return DB::table('follower')->where('user_id', $id)->count();
+        return Follower::where('user_id', $id)->count();
     }
 
     public static function getFollowingCount($id) {
-        return DB::table('follower')->where('follower_id', $id)->count();
+        return Follower::where('follower_id', $id)->count();
     }
 
     public static function getById($id) {
-        return DB::table('users')->where('id', $id)->first();
+        return User::where('id', $id)->first();
     }
 }
