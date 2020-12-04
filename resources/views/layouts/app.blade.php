@@ -90,7 +90,7 @@
             @yield('content')
         </main>
     </div>
-    @include('footer-scripts')
+    @include('footerScripts')
     @stack('user-scripts')
 </body>
 </html>
