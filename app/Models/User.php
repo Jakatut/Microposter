@@ -12,6 +12,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $table = "users";
+
     /**
      * The attributes that are mass assignable.
      *
@@ -45,5 +47,10 @@ class User extends Authenticatable
     public function followers()
     {
         return $this->hasMany(Follower::class);
+    }
+      
+    public function posts()
+    {
+        return $this->hasMany(Post::Class);
     }
 }

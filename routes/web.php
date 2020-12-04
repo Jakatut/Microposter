@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostController;
 
 Auth::routes();
 
@@ -26,6 +27,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/profile/{id}/isFollowing', [ProfileController::class, 'isFollowing'])->name('isFollowing');
 
 	// Route::get('/logout', [LoginController::class, 'doLogout']);
+	Route::get('/posts', [PostController::class, 'index'])->name('posts');
+	Route::get('/newPost', [PostController::class, 'newPost'])->name('newPost');
+	Route::post('/createNewPost', [PostController::class, 'createNewPost'])->name('createNewPost');
 });
 
 
