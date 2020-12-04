@@ -25,9 +25,7 @@
             @endif
         </div>
         <div class="col-md-8">
-            <div class="card">
-                    Feed
-            </div>
+            @include('postCard')
         </div>
     </div>
 </div>
