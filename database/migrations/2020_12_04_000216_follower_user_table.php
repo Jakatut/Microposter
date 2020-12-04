@@ -17,6 +17,7 @@ class FollowerUserTable extends Migration
             $table->increments('id');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('follower_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

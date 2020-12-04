@@ -39,7 +39,7 @@
                 let idOfUserToFollow = JSON.parse("{{json_encode($user->id)}}");
                 $.ajax({
                     type: "POST",
-                    url: `${idOfUserToFollow}/follow`,
+                    url: `${idOfUserToFollow}/toggleFollow`,
                     success: function (result) {
                         if (result.following == true) {
                             $(".follow-user").html('Unfollow');
