@@ -38,7 +38,11 @@ class Profile extends Model
     public static function isFollowing(int $followedUserId) {
         $currentUserId = Auth::user()->id;
         // Check that the provided user id actually exists.
-        $isFollowing = User::find($followedUserId)->followers()->where('follower_id', $currentUserId)->count() === 1;
+        $user = User::find($followedUserId);
+        $isFollowing = false;
+        if ($user) {
+            $isFollowing = $user->followers()->where('follower_id', $currentUserId)->count() === 1;
+        }
         return ['following' => $isFollowing];
     }
 

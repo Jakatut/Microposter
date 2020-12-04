@@ -106,8 +106,13 @@ class ProfileController extends Controller
 
 
     private static function getFollowCounts($userId) {
-        $followerCount = User::find($userId)->followers()->count();
-        $followingCount = Follower::where('follower_id', $userId)->count();
+        $user = User::find($userId);
+        $followerCount = 0;
+        $followingCount = 0;
+        if ($user) {
+            $followerCount = $user->followers()->count();
+            $followingCount = Follower::where('follower_id', $userId)->count();
+        }
         return ['followerCount' => $followerCount, 'followingCount' => $followingCount];
     }
 
