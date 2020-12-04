@@ -49,11 +49,27 @@ class ProfileController extends Controller
         return view('profile', array_merge(['user' => $user], $following, $followCounts));
     }
 
-    public function follow(Request $request, $id) {
-        $result = Profile::follow($id);
+    /**
+     * Follows or unfollows a user depending on the current follow state (following => not following).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function toggleFollow(Request $request, $id) {
+        $result = Profile::toggleFollow($id);
         return response()->json($result);
     }
 
+    /**
+     * Check if the current logged in user is following the user with the provided id.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * 
+     * @return \Illuminate\Http\Response
+     */
     public function isFollowing(Request $request, $id) {
         $result = Profile::isFollowing($id);
         return response()->json($result);
@@ -105,6 +121,12 @@ class ProfileController extends Controller
     }
 
 
+    /**
+     * Agregates the follwer count and following count to ana array.
+     *
+     * @param  int  $userId
+     * @return \Illuminate\Http\Response
+     */
     private static function getFollowCounts($userId) {
         $user = User::find($userId);
         $followerCount = 0;

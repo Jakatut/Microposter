@@ -11,7 +11,15 @@ class Profile extends Model
 {
     use HasFactory;
 
-    public static function follow(int $followedUserId) {
+    /**
+     * Submits the 
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public static function toggleFollow(int $followedUserId) {
         $followingStatus = ['following' => true];
 
         $currentUserId = Auth::user()->id;
