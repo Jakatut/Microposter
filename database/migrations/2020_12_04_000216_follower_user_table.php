@@ -13,7 +13,11 @@ class FollowerUserTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('follower_user', function (Blueprint $table) {
+            $table->increments('id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('follower_id')->constrained()->onDelete('cascade');
+        });
     }
 
     /**
@@ -23,6 +27,6 @@ class FollowerUserTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('follower_user');
     }
 }

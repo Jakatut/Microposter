@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    @if (empty($user))
+    @if (is_null($user))
         <div class="row justify-content-center">
             <h2>This profile does not exist</h2>
         </div>
@@ -30,7 +30,6 @@
             </div>
         </div>
     </div>
-    @endif
 </div>
 
 @push('user-scripts')
@@ -61,5 +60,6 @@
         });
     </script>
 @endpush
+@endif
 
 @endsection
