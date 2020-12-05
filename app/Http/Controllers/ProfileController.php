@@ -28,6 +28,7 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function profileById(Request $request, $id = null) {
+        // User profile requests. (No id).
         if ($id === null) {
             $user = Auth::user();
             $id = $user->id;
