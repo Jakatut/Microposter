@@ -13,9 +13,9 @@ class Post extends Model
 
     //fillable attributes
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'user_id',
+        'content',
+        'title'
     ];
 
 
