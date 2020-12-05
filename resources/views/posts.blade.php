@@ -27,7 +27,12 @@
                             {{ session('status') }}
                         </div>
                     @else
-                    	{{ __('POSTS HERE') }}
+                    	@foreach($posts as $post)
+                    		<div>
+                    			<a href="{{ route('posts.viewPost', $post->id)}}">{{$post->title}}</a>
+                    			<!-- {{$post->content}} -->
+                    		</div>
+                    	@endforeach
                     @endif
 
                     

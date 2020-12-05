@@ -11,21 +11,20 @@
 
                 <div class="card-body">
 
-					<form action="{{ route('createNewPost')}}" method="POST" enctype="multipart/form-data">
+					<form action="{{ route('posts.editPost', $post->id)}}" method="POST" enctype="multipart/form-data">
 						@csrf
 						<div class="form-group">
 							<label for="titleLabel">Post Title</label>
-							<input type="text" name="title" id="titleLabel" class="form-control">
+							<input type="text" name="title" id="titleLabel" class="form-control" value="{{$post->title}}">
 						</div>
 
 						@error('title')
 						    <div class="alert alert-danger">{{ $message }}</div>
 						@enderror
-						<div class="form-group ">
-							<label for="contentInput">Whats on your mind?</label>
-						<textarea class="form-control" rows="3" style="resize: none" maxlength="150" id="contentInput" name="content"></textarea>
+						<div class="form-group">
+							<label for="exampleFormControlTextarea1">Whats on your mind?</label>
+						<textarea class="form-control" rows="3" style="resize: none" maxlength="150" name="content">{{$post->content}}</textarea>
 						</div>
-						
 						@error('content')
 						    <div class="alert alert-danger">{{ $message }}</div>
 						@enderror
@@ -38,7 +37,7 @@
 						
 						<div class="form-group row">
 						    <div class="col-4 offset-10">
-						      <button type="submit" class="btn btn-primary">Post</button>
+						      <button type="submit" class="btn btn-primary">Edit</button>
 						    </div>
 					  	</div>
 					</form>
