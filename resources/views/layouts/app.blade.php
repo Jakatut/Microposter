@@ -71,7 +71,9 @@
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
-
+                                    <a class="dropdown-item" href="{{route('profile')}}">
+                                            {{__('Profile')}}
+                                    </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
@@ -88,5 +90,7 @@
             @yield('content')
         </main>
     </div>
+    @include('footer-scripts')
+    @stack('user-scripts')
 </body>
 </html>
