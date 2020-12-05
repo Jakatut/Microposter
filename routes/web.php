@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\PostController;
+
 
 Auth::routes();
 
@@ -19,12 +21,15 @@ Auth::routes();
 |
 */
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/', [HomeController::class, 'index']);
-	Route::get('/home', [HomeController::class, 'index']);
-	Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-	Route::get('/profile/{id}', [ProfileController::class, 'profileById'])->name('profileById');
+	Route::get('/', [HomeController::class, 'index'])->name('index');
+	Route::get('/home', [HomeController::class, 'index'])->name('home');
+	// Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+	Route::get('/profile/{id?}', [ProfileController::class, 'profileById'])->name('profile');
 	Route::post('/profile/{id}/toggleFollow', [ProfileController::class, 'toggleFollow'])->name('toggleFollow');
 	Route::get('/profile/{id}/isFollowing', [ProfileController::class, 'isFollowing'])->name('isFollowing');
+	Route::get('/following/{id?}', [FollowerController::class, 'following'])->name('following');
+	Route::get('/followers/{id?}', [FollowerController::class, 'followers'])->name('followers');
+
 
 	// Route::get('/logout', [LoginController::class, 'doLogout']);
 	Route::get('/posts', [PostController::class, 'index'])->name('posts');
