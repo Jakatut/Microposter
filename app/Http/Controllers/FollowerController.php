@@ -16,34 +16,57 @@ class FollowerController extends Controller
     }
 
     /**
-     * Retrieve a list of followers for the provided id.
+     * Displays a list of profiles that the user with the provided id (or logged in user if not provided)
+     * is being followed by.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * 
      * @return \Illuminate\Http\Response
      */
-    public function followers(Request $request, $id) {
-        $user = User::find($id);
+    public function followers(Request $request, $id = null) {
+        // User profile requests (no id)
+        if ($id === null) {
+            $user = Auth::user();
+        } else {
+            $user = User::find($id);
+        }
         $followers = [];
         if ($user) {
             $followers = $user->followers()->get();
         }
-        return view('follows', [ 'user' => $user, 'followers' => $followers, 'followContext' => 'followers' ]);
+
+        $foundUsers = [];
+        foreach($followers as $follower) {
+            array_push($foundUsers, User::find($follower->user_id));
+        }
+
+        return view('follows', [ 'user' => $user, 'foundUsers' => $foundUsers, 'followContext' => 'Followers' ]);
     }
 
 
     /**
-     * Display a profile with the given id.
+     * Displays a list of profiles that the user with the provided id (or logged in user if not provided)
+     * is following.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * 
      * @return \Illuminate\Http\Response
      */
-    public function following(Request $request, $id) {
-        $user = Auth::user();
-        $following = Follower::where('follower_id', $id)->get();
-        return view('follows', [ 'user' => $user, 'following' => $following, 'followContext' => 'following' ]);
+    public function following(Request $request, $id = null) {
+        // User profile requests (no id)
+        if ($id === null) {
+            $user = Auth::user();
+            $id = $user->id;
+        } else {
+            $user = User::find($id);
+        }
+        $following = Follower::where('follower_id', $id);
+        $foundUsers = [];
+        foreach($following as $follower) {
+            array_push($foundUsers, User::find($follower->user_id));
+        }
+        return view('follows', [ 'user' => $user, 'foundUsers' => $foundUsers, 'followContext' => 'Following' ]);
     }
 }
