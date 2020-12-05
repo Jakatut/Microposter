@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Follower;
-use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -21,19 +19,6 @@ class ProfileController extends Controller
         $this->middleware('auth');
     }
 
-
-    /**
-     * Display the logged in user's profile.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $user = Auth::user();
-        $followCounts = self::getFollowCounts($user->id);
-        return view('profile', array_merge(['user' => $user], $followCounts));
-    }
-
     /**
      * Display a profile with the given id.
      *
@@ -42,9 +27,14 @@ class ProfileController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function profileById(Request $request, $id) {
-        $user = User::find($id);
-        $following = Profile::isFollowing($id);
+    public function profileById(Request $request, $id = null) {
+        if ($id === null) {
+            $user = Auth::user();
+            $id = $user->id;
+        } else {
+            $user = User::find($id);
+        }
+        $following = Follower::isFollowing($id);
         $followCounts = self::getFollowCounts($id);
         return view('profile', array_merge(['user' => $user], $following, $followCounts));
     }
@@ -58,7 +48,7 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function toggleFollow(Request $request, $id) {
-        $result = Profile::toggleFollow($id);
+        $result = Follower::toggleFollow($id);
         return response()->json($result);
     }
 
@@ -71,7 +61,7 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function isFollowing(Request $request, $id) {
-        $result = Profile::isFollowing($id);
+        $result = Follower::isFollowing($id);
         return response()->json($result);
     }
 
