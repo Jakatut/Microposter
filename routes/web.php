@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\UserAccess;
 
 Auth::routes();
 
@@ -33,11 +34,19 @@ Route::group(['middleware' => 'auth'], function(){
 
 	// Route::get('/logout', [LoginController::class, 'doLogout']);
 	Route::get('/posts', [PostController::class, 'index'])->name('posts');
-	Route::get('/posts/{postId}', [PostController::class, 'viewPost'])->name('posts.viewPost');
+
+	Route::middleware([UserAccess::class])->group(function(){
+ 
+    Route::get('/posts/{postId}', [PostController::class, 'viewPost'])->name('posts.viewPost');
+ 
+ });
+	
 	Route::get('/newPost', [PostController::class, 'newPost'])->name('newPost');
 	Route::post('/createNewPost', [PostController::class, 'createNewPost'])->name('createNewPost');
 	Route::post('/posts/{postId}', [PostController::class, 'editPost'])->name('posts.editPost');
 });
+
+
 
 
 
