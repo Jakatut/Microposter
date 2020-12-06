@@ -27,7 +27,7 @@ class FollowerController extends Controller
     public function followers(Request $request, $id = null) {
         // User profile requests (no id)
         if ($id === null) {
-            $id = Auth::user()->id;
+            $id = auth()->id();
         }
         $user = User::find($id);
         $followers = Follower::where(['user_id' => $id])->get();
