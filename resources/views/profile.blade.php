@@ -18,6 +18,7 @@
             <a href="{{route('followers', ['id' => $user->id])}}" id="followers-count">Followers: {{$followerCount}}</a>
             <br/>
             <a href="{{route('following', ['id' => $user->id])}}" id="following-count">Following: {{$followingCount}}</a>
+            <br/>
             @if (Auth::user()->id !== $user->id)
                 <button class="follow-user">
                     {{ $following ? "Unfollow" : "Follow" }}
