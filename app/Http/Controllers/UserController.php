@@ -24,7 +24,13 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $id = null) {
+    public function index(Request $request) {
+        $query = $request->get('query');
+        if ($query !== null) {
+            // If the user has made a search, redirect to the proper control.
+            return $this->searchUser($request, $query);
+        }
+
         // User profile requests (no id)
         $users = User::where('id', '!=', auth()->id())->get();
         $foundUsers = [];
@@ -34,5 +40,33 @@ class UserController extends Controller
         }
         
         return view('users', ['users' => $foundUsers]);
+    }
+
+    public function searchUser(Request $request, $query) {
+        // User profile requests (no id)
+        if ($query === null) {
+            return $this->index($request, );
+        }
+
+        $where = $this->getSQLSearchFilter($query);
+        $users = User::where($where['field'], $where['op'], $where['value'])->get();
+        $foundUsers = [];
+        foreach($users as $user) {
+            $following = Follower::isFollowing($user->id)['following'];
+            array_push($foundUsers, ['details' => $user, 'following' => $following]);
+        }
+        
+        return view('users', ['users' => $foundUsers]);
+    }
+
+    public function getSQLSearchFilter($query) {
+        $filter = ['field' => 'id', 'op' => '=', 'value' => $query];
+        if (!is_numeric($query)) { 
+            $filter['field'] = 'name';
+            $filter['op'] = 'like';
+            $filter['value'] = "%${query}%";
+        }
+
+        return $filter;
     }
 }
