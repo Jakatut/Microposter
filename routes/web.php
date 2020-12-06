@@ -6,9 +6,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\UserAccess;
-
-
 
 Auth::routes();
 
@@ -30,6 +29,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/profile/{id}/isFollowing', [ProfileController::class, 'isFollowing'])->name('isFollowing');
 	Route::get('/following/{id?}', [FollowerController::class, 'following'])->name('following');
 	Route::get('/followers/{id?}', [FollowerController::class, 'followers'])->name('followers');
+	Route::get('/users/{id?}', [UserController::class, 'index'])->name('users');
 
 
 	// Route::get('/logout', [LoginController::class, 'doLogout']);
