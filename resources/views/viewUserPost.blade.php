@@ -19,7 +19,11 @@
                             <input type="hidden" name="likeable" value="{{ get_class($post) }}">
                             <input type="hidden" name="id" value="{{ $post->id }}">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-thumbs-up white"></i> Like
+                                <span style="color:white">
+                                <i class="fa fa-thumbs-up"></i> Like
+                                    
+
+                                </span>
                             </button>
                         </form>
                     @else
@@ -29,7 +33,7 @@
                             <input type="hidden" name="likeable" value="{{ get_class($post) }}">
                             <input type="hidden" name="id" value="{{ $post->id }}">
                             <button type="submit" class="btn btn-primary">
-                                <span style="color:blue">
+                                <span style="color:white">
                                     <i class="fa fa-thumbs-down"></i> 
                                 </span>
                                 {{ $post->likes()->count() }} likes
