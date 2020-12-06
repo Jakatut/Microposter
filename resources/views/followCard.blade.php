@@ -11,7 +11,6 @@
             <div class="container">
                 @if (!is_null($foundUsers) || empty($foundUsers))
                     @foreach ($foundUsers as $user)
-                    {{dd($user)}}
                     <div class="row mb-4">
                             <div class="profile-image col-ml-6">
                                 <a class="follow_card_user_link" id={{$user['details']->id}}  href="{{route('profile', ['id' => $user['details']->id])}}">
@@ -33,11 +32,9 @@
                                     {{ $user['details']->description ?? "" }}
                                 </div>
                             </div>
-                            @if ($followContext === "Following")
-                                <div class="col">
-                                        <button class="unfollow-user-button" id="unfollow-user-button-{{$user['details']->id}}">{{$user['following'] ? "Unfollow" : "Follow"}}</button>
-                                </div>
-                            @endif
+                            <div class="col">
+                                <button class="unfollow-user-button" id="unfollow-user-button-{{$user['details']->id}}">{{$user['following'] ? "Unfollow" : "Follow"}}</button>
+                            </div>
                         </div>
                     @endforeach
                 @else
@@ -58,7 +55,6 @@
     <script>
         jQuery(function(){
             $(".unfollow-user-button").on('click', function(event) {
-                console.log("event");
                 let userId = event.target.id.replace("unfollow-user-button-", "");
                 let baseUrl = "{{url('/')}}".replace("&quot;", "");
                 $.ajax({
