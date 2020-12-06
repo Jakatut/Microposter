@@ -62,7 +62,7 @@ class FollowerController extends Controller
         } else {
             $user = User::find($id);
         }
-        $following = Follower::where('follower_id', $id);
+        $following = Follower::where('follower_id', $id)->get();
         $foundUsers = [];
         foreach($following as $follower) {
             array_push($foundUsers, User::find($follower->user_id));
