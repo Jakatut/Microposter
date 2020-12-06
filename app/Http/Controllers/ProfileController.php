@@ -37,7 +37,8 @@ class ProfileController extends Controller
         }
         $following = Follower::isFollowing($id);
         $followCounts = self::getFollowCounts($id);
-        return view('profile', array_merge(['user' => $user], $following, $followCounts));
+        $posts = $user->posts()->get();
+        return view('profile', array_merge(['user' => $user, 'posts' => $posts], $following, $followCounts));
     }
 
     /**
