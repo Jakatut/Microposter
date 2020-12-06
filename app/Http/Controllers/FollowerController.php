@@ -33,7 +33,8 @@ class FollowerController extends Controller
         $followers = Follower::where(['user_id' => $id])->get();
         $foundUsers = [];
         foreach($followers as $follower) {
-            array_push($foundUsers, User::find($follower->follower_id));
+            $following = Follower::isFollowing($id);
+            array_push( $foundUsers, ['details' => User::find($follower->follower_id), 'following' => $following]);
         }
 
         return view('follows', [ 'user' => $user, 'foundUsers' => $foundUsers, 'followContext' => 'Followers' ]);

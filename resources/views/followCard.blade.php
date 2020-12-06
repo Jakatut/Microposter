@@ -11,30 +11,31 @@
             <div class="container">
                 @if (!is_null($foundUsers) || empty($foundUsers))
                     @foreach ($foundUsers as $user)
+                    {{dd($user)}}
                     <div class="row mb-4">
                             <div class="profile-image col-ml-6">
-                                <a class="follow_card_user_link" id={{$user->id}}  href="{{route('profile', ['id' => $user->id])}}">
-                                    @if (empty($user->profileImage))
+                                <a class="follow_card_user_link" id={{$user['details']->id}}  href="{{route('profile', ['id' => $user['details']->id])}}">
+                                    @if (empty($user['details']->profileImage))
                                     <img src="{{URL('/images/blank-profile-picture.png')}}" height="50" width="50">
                                     @else
-                                        <img src="{{$user->profileImage}}" height="50" width="50">
+                                        <img src="{{$user['details']->profileImage}}" height="50" width="50">
                                     @endif
                                 </a>
                             </div>
                             <div class="col-md-1"></div>
                             <div class="user-info col">
                                 <div class="row">
-                                    <a class="follow_card_user_link" href="{{route('profile', ['id' => $user->id])}}">
-                                    {{ $user->name }}
+                                    <a class="follow_card_user_link" href="{{route('profile', ['id' => $user['details']->id])}}">
+                                    {{ $user['details']->name }}
                                     </a>
                                 </div>
                                 <div class="row">
-                                    {{ $user->description ?? "" }}
+                                    {{ $user['details']->description ?? "" }}
                                 </div>
                             </div>
                             @if ($followContext === "Following")
                                 <div class="col">
-                                    <button class="unfollow-user-button" id="unfollow-user-button-{{$user->id}}">Unfollow</button>
+                                        <button class="unfollow-user-button" id="unfollow-user-button-{{$user['details']->id}}">{{$user['following'] ? "Unfollow" : "Follow"}}</button>
                                 </div>
                             @endif
                         </div>

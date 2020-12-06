@@ -53,7 +53,7 @@ class LoginController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (auth()->attempt($credentials)) {
-            return redirect('/');
+            return redirect('profile');
         }
         else {
             session()->flash('message', 'Invalid credentials!');
