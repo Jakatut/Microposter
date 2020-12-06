@@ -53,7 +53,11 @@
                     @else
                         @foreach($posts as $post)
                         <div>
+                            @if (Auth::user()->id === $user->id)
                             <a href="{{ route('posts.viewPost', $post->id)}}">{{$post->title}}</a>
+                            @else
+                            <a href="{{ route('posts.viewUserPost', $post->id)}}">{{$post->title}}</a>
+                            @endif
                             <!-- {{$post->content}} -->
                         </div>
                         @endforeach

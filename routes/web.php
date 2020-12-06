@@ -34,6 +34,8 @@ Route::group(['middleware' => 'auth'], function(){
 
 	// Route::get('/logout', [LoginController::class, 'doLogout']);
 	Route::get('/posts', [PostController::class, 'index'])->name('posts');
+
+	Route::get('/posts/user/{postId}', [PostController::class, 'viewUserPost'])->name('posts.viewUserPost');
 	//these route are protected by 'UserAccess' middleware (makes sure that routes aren't accessed by non-original users)
 	Route::middleware([UserAccess::class])->group(function(){
  

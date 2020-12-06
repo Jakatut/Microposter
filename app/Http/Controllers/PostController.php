@@ -46,6 +46,15 @@ class PostController extends Controller
     	return view('viewPost')->with('post', $post);
     }
 
+    public function viewUserPost($id)
+    {
+    	//get single user post
+    	$post = Post::find($id);
+
+
+    	return view('viewUserPost')->with('post', $post);
+    }
+
 
     public function createNewPost(Request $request)
     {
