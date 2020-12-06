@@ -18,7 +18,6 @@
     
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/followCard.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -72,6 +71,9 @@
                                     </a>
                                     <a class="dropdown-item" href="{{route('profile')}}">
                                             {{__('Profile')}}
+                                    </a>
+                                    <a class="dropdown-item" href="{{route('users')}}">
+                                        {{__('Users')}}
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
