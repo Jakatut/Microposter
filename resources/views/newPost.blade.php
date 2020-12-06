@@ -15,7 +15,7 @@
 						@csrf
 						<div class="form-group">
 							<label for="titleLabel">Post Title</label>
-							<input type="text" name="title" id="titleLabel" class="form-control">
+							<input type="text" name="title" id="titleLabel" class="form-control" value="{{ old('title') }}">
 						</div>
 
 						@error('title')
@@ -23,7 +23,7 @@
 						@enderror
 						<div class="form-group ">
 							<label for="contentInput">Whats on your mind?</label>
-						<textarea class="form-control" rows="3" style="resize: none" maxlength="150" id="contentInput" name="content"></textarea>
+						<textarea class="form-control" rows="3" style="resize: none" maxlength="150" id="contentInput" name="content" value="{{ old('content') }}"></textarea>
 						</div>
 						
 						@error('content')
@@ -48,3 +48,4 @@
     </div>
 </div>
 @endsection
+
