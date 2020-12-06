@@ -16,37 +16,8 @@
         </div>
     </div>
         @include('followCard', ['foundUsers' => $foundUsers])
-
+    @endif
 </div>
 
-@push('user-scripts')
-    <script>
-        jQuery(function(){
-            $(".follow-user").on('click', function() {
-                let idOfUserToFollow = JSON.parse("{{json_encode($user->id)}}");
-                $.ajax({
-                    type: "POST",
-                    url: `${idOfUserToFollow}/toggleFollow`,
-                    success: function (result) {
-                        if (result.following == true) {
-                            $(".follow-user").html('Unfollow');
-                        } else {
-                            $(".follow-user").html('Follow');
-                        }
-
-                        // Update followers.
-                        $("#following-count").html(`Following: ${result.followingCount}`);
-                        $("#followers-count").html(`Followers: ${result.followerCount}`);
-                    },
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                    },
-                    dataType:"json"
-                });
-            });
-        });
-    </script>
-@endpush
-@endif
 
 @endsection

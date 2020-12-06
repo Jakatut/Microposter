@@ -24,7 +24,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/', [HomeController::class, 'index'])->name('index');
 	Route::get('/home', [HomeController::class, 'index'])->name('home');
 	Route::get('/profile/{id?}', [ProfileController::class, 'profileById'])->name('profile');
-	Route::post('/profile/{id}/toggleFollow', [ProfileController::class, 'toggleFollow'])->name('toggleFollow');
+	Route::post('/{id}/toggleFollow', [ProfileController::class, 'toggleFollow'])->name('toggleFollow');
 	Route::get('/profile/{id}/isFollowing', [ProfileController::class, 'isFollowing'])->name('isFollowing');
 	Route::get('/following/{id?}', [FollowerController::class, 'following'])->name('following');
 	Route::get('/followers/{id?}', [FollowerController::class, 'followers'])->name('followers');

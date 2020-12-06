@@ -35,9 +35,10 @@
         jQuery(function(){
             $(".follow-user").on('click', function() {
                 let idOfUserToFollow = JSON.parse("{{json_encode($user->id)}}");
+                let baseUrl = "{{url('/')}}".replace("&quot;", "");
                 $.ajax({
                     type: "POST",
-                    url: `${idOfUserToFollow}/toggleFollow`,
+                    url: `${baseUrl}/${idOfUserToFollow}/toggleFollow`,
                     success: function (result) {
                         if (result.following == true) {
                             $(".follow-user").html('Unfollow');

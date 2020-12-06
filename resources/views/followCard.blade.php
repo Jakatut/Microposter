@@ -2,23 +2,45 @@
     <div class="card-header">{{ __($followContext) }}
         
     </div>
+    <link href="{{ asset('css/followCard.css') }}" rel="stylesheet">
 
     <div class="card-body">
         
         <div class="form-group row">
             @csrf
-            <div class="col-4">
+            <div class="container">
                 @if (!is_null($foundUsers) || empty($foundUsers))
                     @foreach ($foundUsers as $user)
-                        <a href="{{route('profile', ['id' => $user->id])}}">
-                            @if (empty($user->profileImage))
-                            <img src="{{URL('/images/blank-profile-picture.png')}}" height="50" width="50">
-                            @else
-                                <img src="{{$user->profileImage}}" height="50" width="50">
+                    <div class="row mb-4">
+                            <div class="profile-image col-ml-6">
+                                <a class="follow_card_user_link" id={{$user->id}}  href="{{route('profile', ['id' => $user->id])}}">
+                                    @if (empty($user->profileImage))
+                                    <img src="{{URL('/images/blank-profile-picture.png')}}" height="50" width="50">
+                                    @else
+                                        <img src="{{$user->profileImage}}" height="50" width="50">
+                                    @endif
+                                </a>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="user-info col">
+                                <div class="row">
+                                    <a class="follow_card_user_link" href="{{route('profile', ['id' => $user->id])}}">
+                                    {{ $user->name }}
+                                    </a>
+                                </div>
+                                <div class="row">
+                                    {{ $user->description ?? "" }}
+                                </div>
+                            </div>
+                            @if ($followContext === "Following")
+                                <div class="col">
+                                    <button class="unfollow-user-button" id="unfollow-user-button-{{$user->id}}">Unfollow</button>
+                                </div>
                             @endif
-                            {{ $user->name }}
-                        </a>
+                        </div>
                     @endforeach
+                @else
+                    <p>No followers yet! Get some!</p>
                 @endif
             </div>
         </div>
@@ -29,3 +51,31 @@
         @endif
     </div>
 </div>
+
+
+@push('user-scripts')
+    <script>
+        jQuery(function(){
+            $(".unfollow-user-button").on('click', function(event) {
+                console.log("event");
+                let userId = event.target.id.replace("unfollow-user-button-", "");
+                let baseUrl = "{{url('/')}}".replace("&quot;", "");
+                $.ajax({
+                    type: "POST",
+                    url: `${baseUrl}/${userId}/toggleFollow`,
+                    success: function (result) {
+                        if (result.following == true) {
+                            $(`#unfollow-user-button-${userId}`).html('Unfollow');
+                        } else {
+                            $(`#unfollow-user-button-${userId}`).html('Follow');
+                        }
+                    },
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    dataType:"json",
+                });
+            });
+        });
+    </script>
+@endpush
