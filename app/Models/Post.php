@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Contracts\Likeable;
+use App\Concerns;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Post extends Model implements Likeable
 {
-    use HasFactory;
+    use HasFactory, Concerns\Likeable;
 
     protected $table = "posts";
 

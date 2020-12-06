@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FollowerController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LikesController;
 use App\Http\Middleware\UserAccess;
 
 Auth::routes();
@@ -30,6 +31,10 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/following/{id?}', [FollowerController::class, 'following'])->name('following');
 	Route::get('/followers/{id?}', [FollowerController::class, 'followers'])->name('followers');
 	Route::get('/users/{id?}', [UserController::class, 'index'])->name('users');
+
+	//like routes
+	Route::post('/like', [LikesController::class, 'like']);
+	Route::delete('/dislike', [LikesController::class, 'dislike'])->name('dislike');
 
 
 	// Route::get('/logout', [LoginController::class, 'doLogout']);
