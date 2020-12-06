@@ -33,7 +33,7 @@ class FollowerController extends Controller
         $followers = Follower::where(['user_id' => $id])->get();
         $foundUsers = [];
         foreach($followers as $follower) {
-            $following = Follower::isFollowing($id);
+            $following = Follower::isFollowing($follower->follower_id)['following'];
             array_push( $foundUsers, ['details' => User::find($follower->follower_id), 'following' => $following]);
         }
 
@@ -61,7 +61,8 @@ class FollowerController extends Controller
         $following = Follower::where('follower_id', $id)->get();
         $foundUsers = [];
         foreach($following as $follower) {
-            array_push($foundUsers, User::find($follower->user_id));
+            $following = Follower::isFollowing($follower->user_id)['following'];
+            array_push($foundUsers, ['details' => User::find($follower->user_id), 'following' => $following]);
         }
         return view('follows', [ 'user' => $user, 'foundUsers' => $foundUsers, 'followContext' => 'Following' ]);
     }
