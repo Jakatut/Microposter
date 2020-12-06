@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="card-header">{{ __($followContext) }}
+    <div class="card-header">{{ __(  $followContext) }}
         
     </div>
     <link href="{{ asset('css/followCard.css') }}" rel="stylesheet">

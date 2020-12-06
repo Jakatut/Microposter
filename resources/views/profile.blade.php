@@ -15,9 +15,9 @@
                 <img src="{{$user->profileImage}}" height="100" width="100">
             @endif
             <p>{{$user->name}}</p>
-            <p id="following-count">Following: {{$followingCount}}</p>
-            <p id="followers-count">Followers: {{$followerCount}}</p>
-            
+            <a href="{{route('followers', ['id' => $user->id])}}" id="followers-count">Followers: {{$followerCount}}</a>
+            <br/>
+            <a href="{{route('following', ['id' => $user->id])}}" id="following-count">Following: {{$followingCount}}</a>
             @if (Auth::user()->id !== $user->id)
                 <button class="follow-user">
                     {{ $following ? "Unfollow" : "Follow" }}
