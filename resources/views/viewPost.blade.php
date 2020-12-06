@@ -10,7 +10,16 @@
                 </div>
 
                 <div class="card-body">
-
+                	<form action="{{ route('posts.deletePost', $post->id)}}" method="POST" enctype="multipart/form-data">
+						@csrf
+                		
+	                	<div class="row text-right">
+	                		<div class="col">
+	                			<button type="submit" class="btn btn-primary">Delete</button>
+	                			
+	                		</div>
+	                	</div>
+                	</form>
 					<form action="{{ route('posts.editPost', $post->id)}}" method="POST" enctype="multipart/form-data">
 						@csrf
 						<div class="form-group">

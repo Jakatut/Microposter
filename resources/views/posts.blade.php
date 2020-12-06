@@ -21,19 +21,25 @@
 							</a>
 						</div>
                     </div>
-
+                    @if (session('success'))
+                    <div class="alert alert-warning" role="alert">
+                        {{ session('success') }}
+                    </div>
+                    @endif
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
                     @else
-                    	@foreach($posts as $post)
-                    		<div>
-                    			<a href="{{ route('posts.viewPost', $post->id)}}">{{$post->title}}</a>
-                    			<!-- {{$post->content}} -->
-                    		</div>
-                    	@endforeach
+                        @foreach($posts as $post)
+                            <div>
+                                <a href="{{ route('posts.viewPost', $post->id)}}">{{$post->title}}</a>
+                                <!-- {{$post->content}} -->
+                            </div>
+                        @endforeach
                     @endif
+                    
+                    
 
                     
                 </div>

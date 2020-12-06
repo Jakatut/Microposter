@@ -34,16 +34,18 @@ Route::group(['middleware' => 'auth'], function(){
 
 	// Route::get('/logout', [LoginController::class, 'doLogout']);
 	Route::get('/posts', [PostController::class, 'index'])->name('posts');
-
+	//these route are protected by 'UserAccess' middleware (makes sure that routes aren't accessed by non-original users)
 	Route::middleware([UserAccess::class])->group(function(){
  
     Route::get('/posts/{postId}', [PostController::class, 'viewPost'])->name('posts.viewPost');
+    Route::post('/posts/{postId}/delete', [PostController::class, 'deletePost'])->name('posts.deletePost');
  
  });
 	
 	Route::get('/newPost', [PostController::class, 'newPost'])->name('newPost');
 	Route::post('/createNewPost', [PostController::class, 'createNewPost'])->name('createNewPost');
 	Route::post('/posts/{postId}', [PostController::class, 'editPost'])->name('posts.editPost');
+	
 });
 
 

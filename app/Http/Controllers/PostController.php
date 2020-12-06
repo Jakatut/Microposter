@@ -46,6 +46,7 @@ class PostController extends Controller
     	return view('viewPost')->with('post', $post);
     }
 
+
     public function createNewPost(Request $request)
     {
     	//validates behind the scences automatically returns error message on false
@@ -96,6 +97,20 @@ class PostController extends Controller
 
     	//redirect back with success message
     	return redirect()->back()->with('success', 'Post updated!');
+    }
+
+    public function deletePost($postId)
+    {
+    	//get user id
+    	$user = auth()->user();
+
+    	//find post based on postId
+    	$post = $user->posts()->find($postId);
+
+    	//delete post
+    	$post->delete();
+
+    	return redirect()->to('/posts')->with('success', 'Post deleted!');
     }
 
     public function getSinglePost($postId)
