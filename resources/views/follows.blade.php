@@ -7,6 +7,9 @@
             <h2>This profile does not exist</h2>
         </div>
     @else
+    <a href="{{route("profile", ['id' => $user->id])}}">
+        <h2>{{$user->name}}</h2>
+    </a>
     <div class="row justify-content-center" id="tabbed-header">
         <div class="col-md-2" id="user-details">
             <a href="{{route('followers', ['id' => $user->id])}}">Followers</a>
