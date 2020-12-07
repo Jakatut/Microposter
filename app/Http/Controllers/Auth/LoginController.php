@@ -59,12 +59,10 @@ class LoginController extends Controller
             session()->flash('message', 'Invalid credentials!');
             return redirect()->back();
         }
-        // dd($user);
     }
 
     public function logout()
     {
-        // dd("in logout");
         Auth::logout();
         return Redirect('/login');
     }
