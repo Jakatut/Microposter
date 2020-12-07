@@ -6,6 +6,8 @@ use App\Models\Follower;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -38,7 +40,9 @@ class ProfileController extends Controller
         $following = Follower::isFollowing($id);
         $followCounts = self::getFollowCounts($id);
         $posts = $user->posts()->get();
-        return view('profile', array_merge(['user' => $user, 'posts' => $posts], $following, $followCounts));
+        $profileImage = $this->getProfileImage($user);
+        
+        return view('profile', array_merge(['user' => $user, 'posts' => $posts, 'profileImageURL' => $profileImage], $following, $followCounts));
     }
 
     /**
@@ -54,7 +58,8 @@ class ProfileController extends Controller
         return response()->json($result);
     }
 
-    /**
+    /**following, $followCounts));
+    }
      * Check if the current logged in user is following the user with the provided id.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -128,6 +133,16 @@ class ProfileController extends Controller
             $followingCount = Follower::where('follower_id', $userId)->count();
         }
         return ['followerCount' => $followerCount, 'followingCount' => $followingCount];
+    }
+
+    private function getProfileImage($user) {
+        if ($user === null) {
+            return "";
+        }
+        $location = $user->id . '-' . $user->name;
+        $disk = Storage::disk('gcs');
+        $url = $disk->url($location);
+        return $url;
     }
 
 }
