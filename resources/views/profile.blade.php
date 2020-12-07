@@ -9,10 +9,10 @@
     @else
     <div class="row justify-content-center">
         <div class="col-md-2" id="user-details">
-            @if (empty($user->profileImage))
+            @if (empty($profileImage))
                 <img src="{{URL('/images/blank-profile-picture.png')}}" height="100" width="100">
             @else
-                <img src="{{$user->profileImage}}" height="100" width="100">
+                <img src="{{$profileImage}}" height="100" width="100">
             @endif
             <p>{{$user->name}}</p>
             <a href="{{route('followers', ['id' => $user->id])}}" id="followers-count">Followers: {{$followerCount}}</a>

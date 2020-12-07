@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
+     * Redirect route after registering an account. Allows users to create their profile.
+     * 
+     */
+    public const PROFILE_CREATION = '/createProfile';
+
+
+    /**
      * The path to the "home" route for your application.
      *
      * This is used by Laravel authentication to redirect users after login.
@@ -18,6 +25,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     public const HOME = '/home';
+
 
     /**
      * The controller namespace for the application.

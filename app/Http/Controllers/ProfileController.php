@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Follower;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
+use Makeable\CloudImages\Nova\Fields\CloudImage;
 
 class ProfileController extends Controller
 {
@@ -38,7 +43,9 @@ class ProfileController extends Controller
         $following = Follower::isFollowing($id);
         $followCounts = self::getFollowCounts($id);
         $posts = $user->posts()->get();
-        return view('profile', array_merge(['user' => $user, 'posts' => $posts], $following, $followCounts));
+        $profileImage = $this->getProfileImageURL($user);
+        
+        return view('profile', array_merge(['user' => $user, 'posts' => $posts, 'profileImageURL' => $profileImage], $following, $followCounts));
     }
 
     /**
@@ -54,7 +61,8 @@ class ProfileController extends Controller
         return response()->json($result);
     }
 
-    /**
+    /**following, $followCounts));
+    }
      * Check if the current logged in user is following the user with the provided id.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -68,48 +76,38 @@ class ProfileController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Displays the new profile view.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function editProfile(Request $request)
     {
-        //
+        return view('editProfile');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
-     * Update the specified resource in storage.
+     * Store a newly created profile.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    public function updateProfile(Request $request) {
+        $profile = new Profile; 
+        $profile->description = $request->description;
+        $image = $request->image;
+        $user = User::find(auth()->id());
+        $profile = $user->profile();
+        $profile->image = $image->hashName();
+        // $profile->save(); This method does not exist? Collection is empty. Don't think I set model/db up properly.
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $location = $this->getProfileImageName($user);
+        $disk = Storage::disk('gcs');
+        $ret = $disk->put($location, $image);
+        $url = $disk->url($location);
+
+        return route('profile', ['profileImage' => $url]);
     }
 
 
@@ -130,4 +128,18 @@ class ProfileController extends Controller
         return ['followerCount' => $followerCount, 'followingCount' => $followingCount];
     }
 
+    private function getProfileImageURL($user) {
+        if ($user === null) {
+            return "";
+        }
+        $location = $this->getProfileImageName($user);
+        $disk = Storage::disk('gcs');
+        $url = $disk->url($location . '/' . $user->profile()->image);
+
+        return $url;
+    }
+
+    private function getProfileImageName($user) {
+        return $user->id . '-' . $user->name;
+    }
 }

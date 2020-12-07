@@ -15,7 +15,7 @@
         <div class="form-group row">
             @csrf
             <div class="container">
-                @if (!is_null($users) || empty($users))
+                @if (!empty($users))
                     @foreach ($users as $user)
                     <div class="row mb-4">
                             <div class="profile-image col-ml-6">
@@ -44,7 +44,11 @@
                         </div>
                     @endforeach
                 @else
-                    <p>No users.</p>
+                    <div class="row mb-4 text-center w-100">
+                        <div class="col">
+                            Could not find any users.
+                        </div>
+                    </div>
                 @endif
             </div>
         </div>
