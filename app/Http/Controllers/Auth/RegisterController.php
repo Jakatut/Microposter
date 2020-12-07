@@ -30,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::PROFILE_CREATION;
+    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -73,9 +73,9 @@ class RegisterController extends Controller
     }
     
 
-    protected function registered(Request $request, $user)
-    {
-        return redirect()->route('editProfile', ['user' => $user]);
-    }
+    // protected function registered(Request $request, $user)
+    // {
+    //     return redirect()->route('editProfile', ['user' => $user]);
+    // }
 }
 
