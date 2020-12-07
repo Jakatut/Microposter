@@ -68,6 +68,7 @@ return [
             'driver' => 'gcs',
             'project_id' => env('GOOGLE_CLOUD_PROJECT_ID', 'your-project-id'),
             'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET', null),
+            'path_prefox' => 'profiles/',
             // 'key_file' => env('GOOGLE_CLOUD_KEY_FILE', 'nad-a4-297821-3f5589a2b2f9.json'), 
             'key_file' => [
                 'type' => env('GOOGLE_CLOUD_ACCOUNT_TYPE'),

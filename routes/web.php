@@ -24,11 +24,16 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('/', [HomeController::class, 'index'])->name('index');
 	Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+	Route::get('/editProfile', [ProfileController::class, 'editProfile'])->name('editProfile');
+	Route::post('/updateProfile', [ProfileController::class, 'updateProfile'])->name('updateProfile');
 	Route::get('/profile/{id?}', [ProfileController::class, 'profileById'])->name('profile');
+
 	Route::post('/{id}/toggleFollow', [ProfileController::class, 'toggleFollow'])->name('toggleFollow');
 	Route::get('/profile/{id}/isFollowing', [ProfileController::class, 'isFollowing'])->name('isFollowing');
 	Route::get('/following/{id?}', [FollowerController::class, 'following'])->name('following');
 	Route::get('/followers/{id?}', [FollowerController::class, 'followers'])->name('followers');
+
 	Route::get('/users/{id?}', [UserController::class, 'index'])->name('users');
 
 
