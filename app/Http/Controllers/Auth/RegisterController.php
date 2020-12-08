@@ -83,7 +83,7 @@ class RegisterController extends Controller
     
     protected function registered(Request $request, $user)
     {
-        return route('editProfile', ['user' => $user]);
+        return view('editProfile');
     }
 }
 

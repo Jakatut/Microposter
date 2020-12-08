@@ -35,4 +35,10 @@ class UserController extends Controller
         
         return view('users', ['users' => $foundUsers]);
     }
+
+    public function deleteUser(Request $request) {
+        $user = User::find(auth()->id());
+        $user->delete();
+        Auth::logout();
+    }
 }

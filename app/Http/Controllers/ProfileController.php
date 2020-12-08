@@ -82,7 +82,10 @@ class ProfileController extends Controller
      */
     public function editProfile(Request $request)
     {
-        return view('editProfile');
+        $user = User::find(auth()->id());
+        $profile = $user->profile()->get()->first();
+        
+        return view('editProfile', ['profile' => $profile, 'created' => 'true']);
     }
 
 
@@ -93,12 +96,7 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function updateProfile(Request $request) {
-        $disk = Storage::disk('gcs');
-        
-        $image = $request->image;
         $user = User::find(auth()->id());
-        
-        
         $profile = $user->profile()->get();
         if (count($profile) == 0) {
             $profile = new Profile;
@@ -106,13 +104,15 @@ class ProfileController extends Controller
             $profile = $profile->first();
         }
 
-        if (!empty($profile->image)) {
+        $disk = Storage::disk('gcs');
+
+        $image = $request->image;
+        if (!empty($profile->image) && $image != null) {
             $location = $this->getProfileImageName($user);
             $disk->delete($location);
+            $profile->image = $image->hashName();
         }
-
-        $profile->description = $request->description;
-        $profile->image = $image->hashName();
+        $profile->description = $request->description ?? $profile->description;
         $profile->save();
 
         $location = $this->getProfileImageUploadName($user);
@@ -150,9 +150,11 @@ class ProfileController extends Controller
         $disk = Storage::disk('gcs');
         if ($disk->exists($location)) {
             $url = $disk->url($location);
+        } else {
+            $url = $disk->url(self::DEFAULT_IMAGE_NAME);
         }
 
-        return $url ?? $disk->url(self::DEFAULT_IMAGE_NAME);
+        return $url;
     }
 
     private function getProfileImageName($user) {
@@ -160,6 +162,7 @@ class ProfileController extends Controller
         if ($user !== null) {
             $profile = $user->profile()->get()->first();
             $location = 'profiles/' . $user->id . '-' . $user->name . '/' . $profile->image;
+            $location = $profile->image ? $location : self::DEFAULT_IMAGE_NAME;
         }
         return $location;
     }
