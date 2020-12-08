@@ -38,7 +38,9 @@ class UserController extends Controller
 
     public function deleteUser(Request $request) {
         $user = User::find(auth()->id());
-        $user->delete();
         Auth::logout();
+        if ($user->delete()) {
+            return redirect()->route('login')->with('global', 'Your account has been deleted!');
+        }
     }
 }

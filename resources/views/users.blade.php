@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container">
-    <a href="{{ url()->previous() }}" class="btn btn-primary mb-4">Back</a>
     <h2>Users</h2>
     <div class="card">
     <div class="card-header">{{ __('Users') }}

@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container">
-	<a href="{{ route('profile') }}" class="btn btn-primary">Back</a>
 		<div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">

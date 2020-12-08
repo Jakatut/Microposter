@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container">
-	<a href="{{ url()->previous() }}" class="btn btn-primary">Back</a>
     @if (is_null($user))
         <div class="row justify-content-center">
             <h2>This profile does not exist</h2>
