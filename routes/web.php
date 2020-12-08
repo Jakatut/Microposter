@@ -28,7 +28,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('/editProfile', [ProfileController::class, 'editProfile'])->name('editProfile');
 	Route::post('/updateProfile', [ProfileController::class, 'updateProfile'])->name('updateProfile');
-	Route::get('/profile/{id?}', [ProfileController::class, 'profileById'])->name('profile');
+	Route::get('/profile/{id?}', [ProfileController::class, 'profile'])->name('profile');
 
 	Route::post('/{id}/toggleFollow', [ProfileController::class, 'toggleFollow'])->name('toggleFollow');
 	Route::get('/profile/{id}/isFollowing', [ProfileController::class, 'isFollowing'])->name('isFollowing');

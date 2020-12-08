@@ -17,13 +17,12 @@ class Profile extends Model
         'image'
     ];
 
-
     public static function getById($id) {
         return User::where('id', $id)->first();
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+    	return $this->belongsTo(User::class);
     }
 }

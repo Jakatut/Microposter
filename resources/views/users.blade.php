@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <button class="unfollow-user-button" id="unfollow-user-button-{{$user['details']->id}}">{{$user['following'] ? "Unfollow" : "Follow"}}</button>
+                                <div class="unfollow-user-button btn btn-primary" id="unfollow-user-button-{{$user['details']->id}}">{{$user['following'] ? "Unfollow" : "Follow"}}</div>
                             </div>
                         </div>
                     @endforeach

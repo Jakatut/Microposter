@@ -14,6 +14,9 @@ use Makeable\CloudImages\Nova\Fields\CloudImage;
 
 class ProfileController extends Controller
 {
+
+    const DEFAULT_IMAGE_NAME="profiles/blank-profile-picture.png";
+
     /**
      * Create a new controller instance.
      *
@@ -32,7 +35,7 @@ class ProfileController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function profileById(Request $request, $id = null) {
+    public function profile(Request $request, $id = null) {
         // User profile requests. (No id).
         if ($id === null) {
             $user = Auth::user();
@@ -40,12 +43,8 @@ class ProfileController extends Controller
         } else {
             $user = User::find($id);
         }
-        $following = Follower::isFollowing($id);
-        $followCounts = self::getFollowCounts($id);
-        $posts = $user->posts()->get();
-        $profileImage = $this->getProfileImageURL($user);
         
-        return view('profile', array_merge(['user' => $user, 'posts' => $posts, 'profileImageURL' => $profileImage], $following, $followCounts));
+        return view('profile', $this->getProfileData($user));
     }
 
     /**
@@ -94,20 +93,34 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function updateProfile(Request $request) {
-        $profile = new Profile; 
-        $profile->description = $request->description;
+        $disk = Storage::disk('gcs');
+        
         $image = $request->image;
         $user = User::find(auth()->id());
-        $profile = $user->profile();
+        
+        
+        $profile = $user->profile()->get();
+        if (count($profile) == 0) {
+            $profile = new Profile;
+        } else {
+            $profile = $profile->first();
+        }
+
+        if (!empty($profile->image)) {
+            $location = $this->getProfileImageName($user);
+            $disk->delete($location);
+        }
+
+        $profile->description = $request->description;
         $profile->image = $image->hashName();
-        // $profile->save(); This method does not exist? Collection is empty. Don't think I set model/db up properly.
+        $profile->save();
 
+        $location = $this->getProfileImageUploadName($user);
+        $disk->put($location, $image);
         $location = $this->getProfileImageName($user);
-        $disk = Storage::disk('gcs');
-        $ret = $disk->put($location, $image);
-        $url = $disk->url($location);
+        $disk->setVisibility($location, 'public');
 
-        return route('profile', ['profileImage' => $url]);
+        return redirect()->route('profile');
     }
 
 
@@ -132,14 +145,40 @@ class ProfileController extends Controller
         if ($user === null) {
             return "";
         }
+
         $location = $this->getProfileImageName($user);
         $disk = Storage::disk('gcs');
-        $url = $disk->url($location . '/' . $user->profile()->image);
+        if ($disk->exists($location)) {
+            $url = $disk->url($location);
+        }
 
-        return $url;
+        return $url ?? $disk->url(self::DEFAULT_IMAGE_NAME);
     }
 
     private function getProfileImageName($user) {
-        return $user->id . '-' . $user->name;
+        $location = "";
+        if ($user !== null) {
+            $profile = $user->profile()->get()->first();
+            $location = 'profiles/' . $user->id . '-' . $user->name . '/' . $profile->image;
+        }
+        return $location;
+    }
+
+    private function getProfileImageUploadName($user) {
+        $location = "";
+        if ($user !== null) {
+            $profile = $user->profile()->get()->first();
+            $location = 'profiles/' . $user->id . '-' . $user->name . '/';
+        }
+        return $location;
+    }
+
+    private function getProfileData($user) {
+        $following = Follower::isFollowing($user->id);
+        $followCounts = $this->getFollowCounts($user->id);
+        $posts = $user->posts()->get();
+        $profileImage = $this->getProfileImageURL($user);
+        $profile = $user->profile()->get()->first();
+        return array_merge(['user' => $user, 'posts' => $posts, 'profileImageURL' => $profileImage, 'profile' => $profile], $following, $followCounts);
     }
 }

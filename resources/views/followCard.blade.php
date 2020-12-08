@@ -9,7 +9,7 @@
         <div class="form-group row">
             @csrf
             <div class="container">
-                @if (!is_null($foundUsers) || empty($foundUsers))
+                @if (!empty($foundUsers))
                     @foreach ($foundUsers as $user)
                     <div class="row mb-4">
                             <div class="profile-image col-ml-6">
@@ -33,12 +33,16 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <button class="unfollow-user-button" id="unfollow-user-button-{{$user['details']->id}}">{{$user['following'] ? "Unfollow" : "Follow"}}</button>
+                                <div class="unfollow-user-button btn btn-primary" id="unfollow-user-button-{{$user['details']->id}}">{{$user['following'] ? "Unfollow" : "Follow"}}</div>
                             </div>
                         </div>
                     @endforeach
                 @else
-                    <p>No followers yet! Get some!</p>
+                    @if (strtolower($followContext) == "following")
+                        <p>You're not following anyone yet.</p>
+                    @else 
+                        <p>Noone is following you yet.</p>
+                    @endif
                 @endif
             </div>
         </div>

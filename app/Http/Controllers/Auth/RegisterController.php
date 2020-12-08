@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\Profile;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -30,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::EDIT_PROFILE;
 
     /**
      * Create a new controller instance.
@@ -65,17 +66,24 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        
+        $profile = new Profile;
+        $profile->description = "";
+        $profile->image = "";
+        $profile->user_id = $user->id;
+        $profile->save();
+
+        return $user;
     }
     
-
-    // protected function registered(Request $request, $user)
-    // {
-    //     return redirect()->route('editProfile', ['user' => $user]);
-    // }
+    protected function registered(Request $request, $user)
+    {
+        return route('editProfile', ['user' => $user]);
+    }
 }
 

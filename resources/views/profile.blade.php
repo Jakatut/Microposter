@@ -9,16 +9,20 @@
     @else
     <div class="row justify-content-center">
         <div class="col-md-2" id="user-details">
-            @if (empty($profileImage))
+            @if (empty($profileImageURL))
                 <img src="{{URL('/images/blank-profile-picture.png')}}" height="100" width="100">
             @else
-                <img src="{{$profileImage}}" height="100" width="100">
+                <img src="{{$profileImageURL}}" height="100" width="100">
             @endif
-            <p>{{$user->name}}</p>
+            <br/>
+            <h3>{{$user->name}}</h3>
+            <span>{{$profile->description}}</span>
+            <br/>
             <a href="{{route('followers', ['id' => $user->id])}}" id="followers-count">Followers: {{$followerCount}}</a>
             <br/>
             <a href="{{route('following', ['id' => $user->id])}}" id="following-count">Following: {{$followingCount}}</a>
             <br/>
+            <a href="{{route('editProfile')}}" id="edit-profile"><i class="fa fa-edit"></i>Edit</a>
             @if (Auth::user()->id !== $user->id)
                 <button class="follow-user">
                     {{ $following ? "Unfollow" : "Follow" }}

@@ -14,7 +14,7 @@ class RouteServiceProvider extends ServiceProvider
      * Redirect route after registering an account. Allows users to create their profile.
      * 
      */
-    public const PROFILE_CREATION = '/createProfile';
+    public const EDIT_PROFILE = '/editProfile';
 
 
     /**
