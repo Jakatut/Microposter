@@ -68,8 +68,7 @@ return [
             'driver' => 'gcs',
             'project_id' => env('GOOGLE_CLOUD_PROJECT_ID', 'your-project-id'),
             'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET', null),
-            'path_prefox' => 'profiles/',
-            //'key_file' => env('GOOGLE_CLOUD_KEY_FILE', '/key-file.json'), //uncomment this line to use a json file instead of env variables for the service account.
+            'path_prefix' => 'profiles/',
             'key_file' => [
                 'type' => env('GOOGLE_CLOUD_ACCOUNT_TYPE'),
                 'private_key_id' => env('GOOGLE_CLOUD_PRIVATE_KEY_ID'),

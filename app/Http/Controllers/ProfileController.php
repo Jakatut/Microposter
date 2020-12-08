@@ -110,8 +110,9 @@ class ProfileController extends Controller
         if (!empty($profile->image) && $image != null) {
             $location = $this->getProfileImageName($user);
             $disk->delete($location);
-            $profile->image = $image->hashName();
         }
+
+        $profile->image = $image->hashName();
         $profile->description = $request->description ?? $profile->description;
         $profile->save();
 
@@ -161,7 +162,7 @@ class ProfileController extends Controller
         $location = "";
         if ($user !== null) {
             $profile = $user->profile()->get()->first();
-            $location = 'profiles/' . $user->id . '-' . $user->name . '/' . $profile->image;
+            $location = $user->id . '-' . $user->name . '/' . $profile->image;
             $location = $profile->image ? $location : self::DEFAULT_IMAGE_NAME;
         }
         return $location;
@@ -171,7 +172,7 @@ class ProfileController extends Controller
         $location = "";
         if ($user !== null) {
             $profile = $user->profile()->get()->first();
-            $location = 'profiles/' . $user->id . '-' . $user->name . '/';
+            $location = $user->id . '-' . $user->name . '/';
         }
         return $location;
     }
