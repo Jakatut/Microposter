@@ -62,7 +62,10 @@
                         @else
                             <li>
                                 <a class="navbar-brand" href="{{ route('posts') }}">
-                                    Posts
+                                    Your Posts
+                                </a>
+                                <a class="navbar-brand" href="{{route('users')}}">
+                                    Users
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
@@ -80,9 +83,7 @@
                                     <a class="dropdown-item" href="{{route('profile')}}">
                                             {{__('Profile')}}
                                     </a>
-                                    <a class="dropdown-item" href="{{route('users')}}">
-                                        {{__('Users')}}
-                                    </a>
+                                   
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
