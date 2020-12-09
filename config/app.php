@@ -229,4 +229,37 @@ return [
 
     ],
 
+    'debug_hide' => [
+        '_ENV' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+            'REDIS_PASSWORD',
+            'MAIL_PASSWORD',
+            'PUSHER_APP_KEY',
+            'PUSHER_APP_SECRET',
+            'GOOGLE_CLOUD_PROJECT_ID',
+            'GOOGLE_CLOUD_STORAGE_BUCKET',
+            'GOOGLE_CLOUD_ACCOUNT_TYPE',
+            'GOOGLE_CLOUD_PRIVATE_KEY_ID',
+            'GOOGLE_CLOUD_PRIVATE_KEY',
+            'GOOGLE_CLOUD_CLIENT_EMAIL',
+            'GOOGLE_CLOUD_CLIENT_ID',
+            'GOOGLE_CLOUD_AUTH_URI',
+            'GOOGLE_CLOUD_TOKEN_URI',
+            'GOOGLE_CLOUD_AUTH_PROVIDER_CERT_URL',
+            'GOOGLE_CLOUD_CLIENT_CERT_URL',
+        ],
+        '_SERVER' => [
+            'APP_KEY',
+            'DB_PASSWORD',
+            'REDIS_PASSWORD',
+            'MAIL_PASSWORD',
+            'PUSHER_APP_KEY',
+            'PUSHER_APP_SECRET',
+        ],
+        '_POST' => [
+            'password',
+        ],
+    ],
+
 ];
