@@ -165,7 +165,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Bepsvpt\SecureHeaders\SecureHeadersServiceProvider::class,
 
         /*
          * Application Service Providers...

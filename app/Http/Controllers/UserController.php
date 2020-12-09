@@ -60,7 +60,8 @@ class UserController extends Controller
         $foundUsers = [];
         foreach($users as $user) {
             $following = Follower::isFollowing($user->id)['following'];
-            array_push($foundUsers, ['details' => $user, 'following' => $following]);
+            $profileImageURL = $this->getProfileImageURL($user);
+            array_push($foundUsers, ['details' => $user, 'following' => $following, 'profileImageURL' => $profileImageURL]);
         }
         
         return view('users', ['users' => $foundUsers]);

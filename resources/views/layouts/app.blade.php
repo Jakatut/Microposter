@@ -14,7 +14,7 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" integrity="sha384-fme0vK3OD7STSL8WoLbmCWu8+NizcSwJYSNUwbpbLgnEzfh4fUuwD5UauZUU6bkU" crossorigin="anonymous">
     
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
