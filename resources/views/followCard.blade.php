@@ -2,8 +2,6 @@
     <div class="card-header">{{ __(  $followContext) }}
         
     </div>
-    <link href="{{ asset('css/followCard.css') }}" rel="stylesheet">
-
     <div class="card-body">
         
         <div class="form-group row">

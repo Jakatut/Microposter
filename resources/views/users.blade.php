@@ -7,8 +7,6 @@
     <div class="card-header">{{ __('Users') }}
         
     </div>
-    <link href="{{ asset('css/followCard.css') }}" rel="stylesheet">
-
     <div class="card-body">
         
         <div class="form-group row">
@@ -33,7 +31,6 @@
                                     {{ 'Joined on ' . substr($user['details']->created_at, 0, strrpos($user['details']->created_at, ' '))}}
                                 </div>
                             </div>
-                            {{dd($user['details'])}}
                             @if (Auth::user()->id !== $user['details']->id)
                                 <div class="col">
                                     <div class="unfollow-user-button btn btn-primary" id="unfollow-user-button-{{$user['details']->id}}">{{$user['following'] ? "Unfollow" : "Follow"}}</div>
