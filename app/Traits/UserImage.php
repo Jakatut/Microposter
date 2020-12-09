@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\Storage;
 
-const DEFAULT_IMAGE_NAME="profiles/blank-profile-picture.png";
+const DEFAULT_IMAGE_NAME="blank-profile-picture.png";
 
 trait UserImage {
 

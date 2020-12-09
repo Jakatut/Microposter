@@ -108,13 +108,14 @@ class ProfileController extends Controller
             $disk = Storage::disk('gcs');
 
             $image = $request->image;
-            if ($profile->image && $image != null) {
-                $location = $this->getProfileImageName($user);
-                $disk->delete($location);
+            $location = $this->getProfileImageName($user);
+            if ($image != null) {
+                if ($profile->image && $disk->exists($location)) {
+                    $disk->delete($location);
+                }
                 $profile->image = $image->hashName();
                 $location = $this->getProfileImageUploadName($user);
-                $disk->put($location, $image);
-                $disk->setVisibility($location, 'public');
+                $disk->put($location, $image, 'public');
             }
 
             $profile->description = $request->description ?? $profile->description;
