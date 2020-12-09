@@ -20,7 +20,7 @@
                             <div class="profile-image col-ml-6">
                                 <a class="follow_card_user_link" id={{$user['details']->id}}  href="{{route('profile', ['id' => $user['details']->id])}}">
                                     @if (empty($user['details']->profileImage))
-                                    <img src="{{URL('/images/blank-profile-picture.png')}}" height="50" width="50">
+                                        <img src="{{URL('/images/blank-profile-picture.png')}}" height="50" width="50">
                                     @else
                                         <img src="{{$user['details']->profileImage}}" height="50" width="50">
                                     @endif

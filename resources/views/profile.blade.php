@@ -2,14 +2,14 @@
 
 @section('content')
 <div class="container">
-    @if (is_null($user))
+    @if (!$user)
         <div class="row justify-content-center">
             <h2>This profile does not exist</h2>
         </div>
     @else
     <div class="row justify-content-center">
         <div class="col-md-2" id="user-details">
-            @if (empty($profileImageURL))
+            @if (!$profileImageURL)
                 <img src="{{URL('/images/blank-profile-picture.png')}}" height="100" width="100">
             @else
                 <img src="{{$profileImageURL}}" height="100" width="100">
@@ -22,11 +22,13 @@
             <br/>
             <a href="{{route('following', ['id' => $user->id])}}" id="following-count">Following: {{$followingCount}}</a>
             <br/>
-            <a href="{{route('editProfile')}}" id="edit-profile"><i class="fa fa-edit"></i>Edit</a>
             @if (Auth::user()->id !== $user->id)
-                <button class="follow-user">
+                <div class="follow-user btn btn-primary">
                     {{ $following ? "Unfollow" : "Follow" }}
-                </button>
+                </div>
+            @else
+                <a href="{{route('editProfile')}}" id="edit-profile"><i class="fa fa-edit"></i>Edit</a>
+                <br/>
             @endif
         </div>
         <div class="col-md-8">

@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Follower;
+use App\Traits\UserImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
 class UserController extends Controller
 {
+    use UserImage;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -25,12 +28,19 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, $id = null) {
+
+        $query = $request->get('query');
+        if ($id === null && !empty($query)) {
+            return $this->searchUser($request, $query);
+        }
+
         // User profile requests (no id)
         $users = User::where('id', '!=', auth()->id())->get();
         $foundUsers = [];
         foreach($users as $user) {
             $following = Follower::isFollowing($user->id)['following'];
-            array_push($foundUsers, ['details' => $user, 'following' => $following]);
+            $profileImageURL = $this->getProfileImageURL($user);
+            array_push($foundUsers, ['details' => $user, 'following' => $following, 'profileImageURL' => $profileImageURL]);
         }
         
         return view('users', ['users' => $foundUsers]);
@@ -42,5 +52,33 @@ class UserController extends Controller
         if ($user->delete()) {
             return redirect()->route('login')->with('global', 'Your account has been deleted!');
         }
+    }
+
+    public function searchUser(Request $request, $query) {
+        // User profile requests (no id)
+        if ($query === null) {
+            return $this->index($request);
+        }
+
+        $where = $this->getSQLSearchFilter($query);
+        $users = User::where($where['field'], $where['op'], $where['value'])->get();
+        $foundUsers = [];
+        foreach($users as $user) {
+            $following = Follower::isFollowing($user->id)['following'];
+            array_push($foundUsers, ['details' => $user, 'following' => $following]);
+        }
+        
+        return view('users', ['users' => $foundUsers]);
+    }
+
+    public function getSQLSearchFilter($query) {
+        $filter = ['field' => 'id', 'op' => '=', 'value' => $query];
+        if (!is_numeric($query)) { 
+            $filter['field'] = 'name';
+            $filter['op'] = 'like';
+            $filter['value'] = "%${query}%";
+        }
+
+        return $filter;
     }
 }

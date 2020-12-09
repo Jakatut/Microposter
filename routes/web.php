@@ -9,6 +9,11 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LikesController;
 use App\Http\Middleware\UserAccess;
+use Illuminate\Support\Facades\URL;
+
+if (env('APP_ENV') === 'production') {
+	URL::forceScheme('https');
+}
 
 Auth::routes();
 
@@ -35,7 +40,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/following/{id?}', [FollowerController::class, 'following'])->name('following');
 	Route::get('/followers/{id?}', [FollowerController::class, 'followers'])->name('followers');
 
-	Route::get('/users/{id?}', [UserController::class, 'index'])->name('users');
+	Route::get('/users/', [UserController::class, 'index'])->name('users');
+	Route::get('/users/{query}', [UserController::class, 'searchUser'])->name('searchUser');
 	Route::delete('/deleteUser', [UserController::class, 'deleteUser'])->name('deleteUser');
 
 	//like routes

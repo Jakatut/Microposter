@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Follower;
 use App\Models\Profile;
 use App\Models\User;
+use App\Traits\UserImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -15,7 +16,7 @@ use Makeable\CloudImages\Nova\Fields\CloudImage;
 class ProfileController extends Controller
 {
 
-    const DEFAULT_IMAGE_NAME="profiles/blank-profile-picture.png";
+    use UserImage;
 
     /**
      * Create a new controller instance.
@@ -43,7 +44,7 @@ class ProfileController extends Controller
         } else {
             $user = User::find($id);
         }
-        
+
         return view('profile', $this->getProfileData($user));
     }
 
@@ -88,7 +89,6 @@ class ProfileController extends Controller
         return view('editProfile', ['profile' => $profile, 'created' => 'true']);
     }
 
-
     /**
      * Store a newly created profile.
      *
@@ -97,29 +97,31 @@ class ProfileController extends Controller
      */
     public function updateProfile(Request $request) {
         $user = User::find(auth()->id());
-        $profile = $user->profile()->get();
-        if (count($profile) == 0) {
-            $profile = new Profile;
-        } else {
-            $profile = $profile->first();
-        }
+        if ($user !== null) {
+            $profile = $user->profile()->get();
+            if (count($profile) == 0) {
+                $profile = new Profile;
+            } else {
+                $profile = $profile->first();
+            }
 
-        $disk = Storage::disk('gcs');
+            $disk = Storage::disk('gcs');
 
-        $image = $request->image;
-        if (!empty($profile->image) && $image != null) {
+            $image = $request->image;
+            if ($profile->image && $image != null) {
+                $location = $this->getProfileImageName($user);
+                $disk->delete($location);
+                $profile->image = $image->hashName();
+                $location = $this->getProfileImageUploadName($user);
+                $disk->put($location, $image);
+                $disk->setVisibility($location, 'public');
+            }
+
+            $profile->description = $request->description ?? $profile->description;
+            $profile->save();
+
             $location = $this->getProfileImageName($user);
-            $disk->delete($location);
         }
-
-        $profile->image = $image->hashName();
-        $profile->description = $request->description ?? $profile->description;
-        $profile->save();
-
-        $location = $this->getProfileImageUploadName($user);
-        $disk->put($location, $image);
-        $location = $this->getProfileImageName($user);
-        $disk->setVisibility($location, 'public');
 
         return redirect()->route('profile');
     }
@@ -142,47 +144,23 @@ class ProfileController extends Controller
         return ['followerCount' => $followerCount, 'followingCount' => $followingCount];
     }
 
-    private function getProfileImageURL($user) {
-        if ($user === null) {
-            return "";
-        }
-
-        $location = $this->getProfileImageName($user);
-        $disk = Storage::disk('gcs');
-        if ($disk->exists($location)) {
-            $url = $disk->url($location);
-        } else {
-            $url = $disk->url(self::DEFAULT_IMAGE_NAME);
-        }
-
-        return $url;
-    }
-
-    private function getProfileImageName($user) {
-        $location = "";
-        if ($user !== null) {
-            $profile = $user->profile()->get()->first();
-            $location = $user->id . '-' . $user->name . '/' . $profile->image;
-            $location = $profile->image ? $location : self::DEFAULT_IMAGE_NAME;
-        }
-        return $location;
-    }
-
-    private function getProfileImageUploadName($user) {
-        $location = "";
-        if ($user !== null) {
-            $profile = $user->profile()->get()->first();
-            $location = $user->id . '-' . $user->name . '/';
-        }
-        return $location;
-    }
-
+    /**
+     * Gathers profile data to be displayed on the profile page.
+     *
+     * @param  int  $userId
+     * @return \Illuminate\Http\Response
+     */
     private function getProfileData($user) {
-        $following = Follower::isFollowing($user->id);
-        $followCounts = $this->getFollowCounts($user->id);
-        $posts = $user->posts()->get();
-        $profileImage = $this->getProfileImageURL($user);
-        $profile = $user->profile()->get()->first();
-        return array_merge(['user' => $user, 'posts' => $posts, 'profileImageURL' => $profileImage, 'profile' => $profile], $following, $followCounts);
+        $profileData = [];
+        if ($user !== null) {
+            $following = Follower::isFollowing($user->id);
+            $followCounts = $this->getFollowCounts($user->id);
+            $posts = $user->posts()->get();
+            $profileImage = $this->getProfileImageURL($user);
+            $profile = $user->profile()->get()->first();
+            $profileData = array_merge(['user' => $user, 'posts' => $posts, 'profileImageURL' => $profileImage, 'profile' => $profile], $following, $followCounts);
+        }
+
+        return $profileData;
     }
 }

@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades\URL;
+
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
@@ -65,6 +67,5 @@ $app->singleton(
 */
 $app->useStoragePath(env('APP_STORAGE', base_path() . '/storage'));
 # [END]
-
 
 return $app;
