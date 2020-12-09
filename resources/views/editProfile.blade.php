@@ -29,7 +29,7 @@
             <div class="form-group">
                 <h3 for="name" class="card-header w-100 m-1">Delete Account</h3>
                 <p><b>WARNING</b>: This action cannot be undone.</p>
-                <button type="button" class="btn btn-danger d-block" data-toggle="modal" data-target="#exampleModal">Delete profile</button>
+                <button type="button" class="btn btn-danger d-block" data-toggle="modal" data-target="#exampleModal">Delete Account</button>
             </div>
         </div>
     </div>
