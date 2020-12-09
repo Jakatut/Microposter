@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Follower;
+use App\Traits\UserImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
 class FollowerController extends Controller
 {
+    use UserImage;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -33,8 +36,10 @@ class FollowerController extends Controller
         $followers = Follower::where(['user_id' => $id])->get();
         $foundUsers = [];
         foreach($followers as $follower) {
+            $followingUser = User::find($follower->follower_id);
             $following = Follower::isFollowing($follower->follower_id)['following'];
-            array_push( $foundUsers, ['details' => User::find($follower->follower_id), 'following' => $following]);
+            $profileImageURL = $this->getProfileImageURL($followingUser);
+            array_push( $foundUsers, ['details' => $followingUser, 'following' => $following, 'profileImageURL' => $profileImageURL]);
         }
 
         return view('follows', [ 'user' => $user, 'foundUsers' => $foundUsers, 'followContext' => 'Followers' ]);
@@ -61,8 +66,10 @@ class FollowerController extends Controller
         $following = Follower::where('follower_id', $id)->get();
         $foundUsers = [];
         foreach($following as $follower) {
+            $followerUser = User::find($follower->user_id);
             $following = Follower::isFollowing($follower->user_id)['following'];
-            array_push($foundUsers, ['details' => User::find($follower->user_id), 'following' => $following]);
+            $profileImageURL = $this->getProfileImageURL($followerUser);
+            array_push($foundUsers, ['details' => $followerUser, 'following' => $following, 'profileImageURL' => $profileImageURL]);
         }
         return view('follows', [ 'user' => $user, 'foundUsers' => $foundUsers, 'followContext' => 'Following' ]);
     }
