@@ -234,10 +234,10 @@ return [
             env('APP_ENV') === 'production' ? array_keys($_COOKIE) : []
         ],
         '_SERVER' => [
-           array_keys($_SERVER)
+            env('APP_ENV') === 'production' ? array_keys($_SERVER) : []
         ],
         '_POST' => [
-            array_keys($_POST)
+            env('APP_ENV') === 'production' ? array_keys($_POST): []
         ],
     ],
 

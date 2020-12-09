@@ -55,11 +55,6 @@ class UserController extends Controller
     }
 
     public function searchUser(Request $request, $query) {
-        // User profile requests (no id)
-        if ($query === null) {
-            return $this->index($request);
-        }
-
         $where = $this->getSQLSearchFilter($query);
         $users = User::where($where['field'], $where['op'], $where['value'])->get();
         $foundUsers = [];
