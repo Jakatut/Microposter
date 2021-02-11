@@ -1,5 +1,3 @@
-# NAD A-4
-
 ### Required Features
 
 1. Login/Register
